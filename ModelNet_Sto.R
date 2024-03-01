@@ -2,8 +2,8 @@ library(deSolve)
 library(bipartite)
 
 
-M=7# No. of plant
-N=13 # No. of animal
+M=10# No. of plant
+N=15 # No. of animal
 {# Intrinsic growth rate
   rP=matrix(runif(M,0,0.1), nr=M)
   rA=matrix(runif(N,0,0.1), nr=N)
@@ -37,8 +37,8 @@ lotka<-function(t,y,parameters){
     XA<-Xx[(M+1):(M+N)]
     Fi<-Xx[(M+N+1):(2*M+N)]
     bet<-matrix(Xx[(2*M+N+1):(M*N+2*M+N)],M,N)
-    dXP<-rP-CP*XP+(((sigma_P*bet)%*%XA)*(Fi/XP))+0.1*rnorm(M,0,1)
-    dXA<-rA-CA*XA+(t(sigma_A*bet)%*%Fi)+0.1*rnorm(N,0,1) 
+    dXP<-rP-CP*XP+(((sigma_P*bet)%*%XA)*(Fi/XP))+0.1*rnorm(M,0,1) #diffusion added
+    dXA<-rA-CA*XA+(t(sigma_A*bet)%*%Fi)+0.1*rnorm(N,0,1) # diffusion added
     dX<-Xx[1:(M+N)]*rbind(dXP,dXA)
     dFi<-a*XP-w*Fi-rowSums(bet*(Fi%*%t(XA)))
     dbet<-(bet%*%diag(c(G)))*sweep(sigma_A*Fi,2,colSums(bet*sigma_A*Fi),"-")
